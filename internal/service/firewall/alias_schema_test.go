@@ -13,13 +13,13 @@ import (
 func TestConvertAliasSchemaToStructIgnoresIPProtocolForHostAlias(t *testing.T) {
 	data := &aliasResourceModel{
 		Enabled:    types.BoolValue(true),
-		Name:       types.StringValue("ip_cameras"),
+		Name:       types.StringValue("testalias"),
 		Type:       types.StringValue("host"),
 		IPProtocol: types.SetValueMust(types.StringType, []attr.Value{types.StringValue("IPv4")}),
 		Interface:  types.StringValue(""),
 		Content: types.SetValueMust(types.StringType, []attr.Value{
-			types.StringValue("10.0.40.3"),
-			types.StringValue("10.0.40.4"),
+			types.StringValue("192.168.1.100"),
+			types.StringValue("192.168.1.101"),
 		}),
 		Categories:  types.SetValueMust(types.StringType, []attr.Value{}),
 		UpdateFreq:  types.Float64Value(-1),
@@ -37,7 +37,7 @@ func TestConvertAliasSchemaToStructIgnoresIPProtocolForHostAlias(t *testing.T) {
 func TestConvertAliasSchemaToStructDefaultsIPProtocolForApplicableAlias(t *testing.T) {
 	data := &aliasResourceModel{
 		Enabled:     types.BoolValue(true),
-		Name:        types.StringValue("external_alias"),
+		Name:        types.StringValue("externalalias"),
 		Type:        types.StringValue("external"),
 		IPProtocol:  types.SetNull(types.StringType),
 		Interface:   types.StringValue(""),
@@ -58,13 +58,13 @@ func TestConvertAliasSchemaToStructDefaultsIPProtocolForApplicableAlias(t *testi
 func TestConvertAliasStructToSchemaIgnoresIPProtocolForHostAlias(t *testing.T) {
 	result, err := convertAliasStructToSchema(&opnfirewall.Alias{
 		Enabled:    "1",
-		Name:       "ip_cameras",
+		Name:       "testalias",
 		Type:       api.SelectedMap("host"),
 		IPProtocol: api.SelectedMapList{"IPv4"},
 		Interface:  api.SelectedMap(""),
 		Content: api.SelectedMapListNL{
-			"10.0.40.3",
-			"10.0.40.4",
+			"192.168.1.100",
+			"192.168.1.101",
 		},
 		Categories: []string{},
 		UpdateFreq: "-1",
@@ -79,7 +79,7 @@ func TestConvertAliasStructToSchemaIgnoresIPProtocolForHostAlias(t *testing.T) {
 func TestConvertAliasStructToSchemaDefaultsIPProtocolForApplicableAlias(t *testing.T) {
 	result, err := convertAliasStructToSchema(&opnfirewall.Alias{
 		Enabled:    "1",
-		Name:       "external_alias",
+		Name:       "externalalias",
 		Type:       api.SelectedMap("external"),
 		IPProtocol: api.SelectedMapList{},
 		Interface:  api.SelectedMap(""),
